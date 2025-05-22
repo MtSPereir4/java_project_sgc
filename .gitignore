@@ -1,0 +1,6 @@
+bin/controle/
+*.class
+bin/principal/
+*.class
+bin/modelo/
+*.class
