@@ -4,6 +4,10 @@ package principal ;
 //  Importando biblioteca e pacotes
 import java.util.Scanner ;
 import controle.Agenda;
+// import modelo.Contato;
+import modelo.ContatoPessoal;
+import modelo.ContatoProfissional;
+
 
 public class Main {
     public static void main(String[] args) {
@@ -20,8 +24,7 @@ public class Main {
          //  Looping de execução do programa
         while (true) {
             //  Exibindo o menu de opções
-            System.out.println("\n\033[1;37mMenu de Opções:\033[0m\n") ;
-            System.out.println("\033[1;33m0 - Encerrar o Programa\n1 - Adicionar Contato\n2 - Excluir Contato\n3 - Buscar Contato\n4 - Listar Contatos\033[0m\n") ;
+            agendaDeContatos.menu();
             
             //  Interação com o susuário
             System.out.print("\033[1;37mInforme a opção desejada: \033[0m") ;
@@ -34,7 +37,7 @@ public class Main {
             }
             //  Falha na conversão
             catch (NumberFormatException x) {
-                System.out.println("\n\033[1;31mEntrada Inválida. Digite apenas números inteiro.\033[0m") ;
+                System.out.println("\n\033[1;31mEntrada Inválida. Digite apenas números inteiros.\033[0m") ;
                 continue ;
             }
 
@@ -67,7 +70,7 @@ public class Main {
                     }
                     //  Falha na conversão
                     catch (NumberFormatException x) {
-                        System.out.println("\n\033[1;31mEntrada Inválida. Digite apenas números inteiro.\033[0m") ;
+                        System.out.println("\n\033[1;31mEntrada Inválida. Digite apenas números inteiros.\033[0m") ;
                         continue ;
                     }
                         
@@ -77,9 +80,51 @@ public class Main {
                     }
                     //  Adicionando um contato
                     else {
-                        agendaDeContatos.adicionarContato(opcaoTipoContato, input) ;
-                        //  Saíndo do looping da adição de contatos
-                        break ;
+                        //  Declarando variáveis para armazenarem os valores referentes as propriedades da classe Contato
+                        String inputNome;
+                        String inputEmail;
+                        String inputTelefone;
+
+                        //  Recebendo valores referentes as propriedades de Contato
+                        System.out.print("\033[1;33mNome: \033[0m");
+                        inputNome = input.nextLine() ;
+                        System.out.print("\033[1;33mEmail: \033[0m");
+                        inputEmail = input.nextLine() ;
+                        System.out.print("\033[1;33mTelefone: \033[0m");
+                        inputTelefone = input.nextLine() ;
+
+                        //  Adição de ContatoPessoal
+                        if (opcaoTipoContato == 1) {
+                            //  Declarando variáveis para armazenarem os valores referentes as propriedades da classe ContatoPessoal
+                            String inputDataAniversario;
+                            String inputEndereco;
+
+                            //  Recebendo valores referentes as propriedades de ContatoPessoal
+                            System.out.print("\033[1;33mData de Aniversário: \033[0m");
+                            inputDataAniversario = input.nextLine() ;
+                            System.out.print("\033[1;33mEndereço: \033[0m");
+                            inputEndereco = input.nextLine() ;
+
+                            //  Adicionando contato
+                            agendaDeContatos.adicionarContato(new ContatoPessoal(inputNome, inputEmail, inputTelefone, inputDataAniversario, inputEndereco)) ;
+                            break;
+                        }
+                        //  Adição de ContatoProfissional
+                        else if (opcaoTipoContato == 2) {
+                            //  Declarando variáveis para armazenarem os valores referentes as propriedades da classe ContatoProfissional
+                            String inputEmpresa;
+                            String inputCargo;
+
+                            //  Recebendo valores referentes as propriedades de ContatoPessoal
+                            System.out.print("\033[1;33mEmpresa: \033[0m");
+                            inputEmpresa = input.nextLine() ;
+                            System.out.print("\033[1;33mCargo: \033[0m");
+                            inputCargo = input.nextLine() ;
+                            
+                            //  Adicionando um objeto ContatoProfissioal na lista de contatos
+                            agendaDeContatos.adicionarContato(new ContatoProfissional(inputNome, inputEmail, inputTelefone, inputEmpresa, inputCargo));
+                            break;
+                        }
                     }
                 }   //  Fim do looping de tratamento de entrada para adição de contato
             }   //  Fim do bloco adição de contatos
@@ -94,13 +139,27 @@ public class Main {
                 //  Lista não vazia
                 else {
                     //  Variável que armazena o id do contato a ser removido
-                    String idRemocao ;
-            
-                    //  Interção com o usuário
-                    System.out.print("\n\033[1;33mID do contato a ser removido: \033[0m");
-                    idRemocao = input.nextLine() ;
-                    
-                    //  Chamando o métedo para remover o contato
+                    int idRemocao ;
+
+                    //  Validação do id informado para remoçao do contato
+                    while (true) {
+                        //  Interção com o usuário
+                        System.out.print("\n\033[1;33mID do contato a ser removido: \033[0m");
+                        entrada = input.nextLine() ;
+                        
+                        //  Validando o tipo da entrada
+                        try {
+                            //  Tenta realizar a conversão de String para int
+                            idRemocao = Integer.parseInt(entrada) ;
+                            break;
+                        }
+                        //  Falha na conversão
+                        catch (NumberFormatException x) {
+                            System.out.println("\n\033[1;31mEntrada Inválida. Digite apenas números inteiros.\033[0m") ;
+                            continue ;
+                        }
+                    }
+                    // Chamando o métedo para remover o contato
                     agendaDeContatos.removerContatos(idRemocao) ;
                 }
             }   //  Fim do bloco remover contatos
@@ -131,7 +190,7 @@ public class Main {
                             opcaoBusca = Integer.parseInt(entrada) ;
                         }
                         catch (NumberFormatException x) {
-                            System.out.println("\n\033[1;31mEntrada Inválida. Digite apenas números inteiro.\033[0m") ;
+                            System.out.println("\n\033[1;31mEntrada Inválida. Digite apenas números inteiros.\033[0m") ;
                             continue ;
                         }
 
@@ -141,8 +200,29 @@ public class Main {
                         }
                         //  Opção de busca válida
                         else {
+                            //  Variavel que receberá o valor a ser buscado
+                            String parBusca ;
+
+                            //  Busca por nome
+                            if (opcaoBusca == 1) {
+                                //  Interação com o usuário
+                                System.out.print("\n\033[1;37mInforme o nome: \033[0m");
+                                parBusca = input.nextLine() ;
+                            }
+                            //  Busca por Telefone
+                            else if (opcaoBusca == 2) {
+                                //  Interação com o usuário
+                                System.out.print("\n\033[1;37mInforme o telefone: \033[0m");
+                                parBusca = input.nextLine();
+                            }
+                            //  Busca por email
+                            else {
+                                //  Interação com o usuário
+                                System.out.print("\n\033[1;37mInforme o email: \033[0m");
+                                parBusca = input.nextLine() ;
+                            }
                             //  Buscando contatos
-                            agendaDeContatos.buscarContatos(opcaoBusca, input) ;
+                            agendaDeContatos.buscarContatos(opcaoBusca, parBusca);
                             break ;
                         }
                     }
@@ -175,7 +255,7 @@ public class Main {
                             opcaoListagem = Integer.parseInt(entrada) ;
                         }
                         catch (NumberFormatException x) {
-                            System.out.println("\n\033[1;31mEntrada Inválida. Digite apenas números inteiro.\033[0m") ;
+                            System.out.println("\n\033[1;31mEntrada Inválida. Digite apenas números inteiros.\033[0m") ;
                             continue ;
                         }
 
@@ -200,3 +280,7 @@ public class Main {
         }   //  Fim do programa
     }   //  Fim da função main
 }   //  Fim da classe Main
+
+
+//  javac -d bin src\modelo\*.java src\controle\Agenda.java src\principal\Main.java
+//  java principal.Main
